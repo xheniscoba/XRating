@@ -1,5 +1,7 @@
-from task.task import Task
+from fastapi import Request, FastAPI
 import random
+from pydantic import BaseModel
+from typing import Optional
 
 images_descriptions = [['https://www.designbold.com/academy/wp-content/uploads/2018/07/poster-qu%E1%BA%A3ng-c%C3%A1o-%E1%BA%A5n-t%C6%B0%E1%BB%A3ng-2-1.png', 'Already fed up with the lockdown?\nGet your tickets now for the party of the year!!'],
     ['https://images.template.net/wp-content/uploads/2016/05/12063326/Smooth-the-Fruit-Ad-Poster-Download.jpg?width=600', 'Delicious smoothie, targeting teens.'],
@@ -19,38 +21,24 @@ toggle_buttons_to_rate = [['What group age are allowed to view the ad?', 'G', 'P
     ['Did the ad capture AND hold your attention?', 'Yes', 'No'],
     ['Is the description relevant to the ad?', 'Definetly relevant', 'Slightly relevant', 'Not relevant at all']]
 
-class Connection:
-    """
-    A class used to communicate 'with the server', it recieves tasks and sends the rated results..
 
-    Methods
-    -------
-    get_task(): Fetches a random Task.
-    send_result(): Sends the Result back to the server.
-    """
+class Result(BaseModel):
+    #id: str
+    checkbox_results: Optional[list] = None
+    slider_results: Optional[list] = None
+    toggle_buttons_results: Optional[list] = None
 
-    def get_task(self):
-        """ 
-        Fetches a Task 
+app = FastAPI()
 
-        Returns
-        -------
-        Task object randomly initialized.
-        """
-        random_image, random_description = random.choice(images_descriptions)
-        checkbox_rating = random.sample(checkboxes_to_rate, k=random.randint(0, 3))
-        slider_rating = random.sample(sliders_to_rate, k=random.randint(0, 3))
-        toggle_button_rating = random.sample(toggle_buttons_to_rate, k=random.randint(0, 3))
-        
-        task = Task(random_image, random_description, checkbox_rating, slider_rating, toggle_button_rating)
-        return task
+@app.get("/task")
+def get_task():
+    random_image, random_description = random.choice(images_descriptions)
+    checkbox_rating = random.sample(checkboxes_to_rate, k=random.randint(0, 3))
+    slider_rating = random.sample(sliders_to_rate, k=random.randint(0, 3))
+    toggle_button_rating = random.sample(toggle_buttons_to_rate, k=random.randint(0, 3))
+    return {"image": random_image, 'description': random_description, 'checkboxes_to_rate': checkbox_rating, 'sliders_to_rate': slider_rating, 'toggle_buttons_to_rate': toggle_button_rating}
 
-    def send_result(self, result):
-        """ 
-        Sends a Result back to the server.
-
-        Parameters
-        ----------
-        result: Result object
-        """
-        pass
+@app.post("/result")
+def add_result(result: Result):
+    print(result)
+    return result

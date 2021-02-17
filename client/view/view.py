@@ -98,7 +98,7 @@ class View:
         self.list_checkboxes.clear()
         self.list_sliders.clear()
         self.list_toggle_buttons.clear()
-        print(result)
+        #print(result)
         return result
 
     def add_NextButton(self):
