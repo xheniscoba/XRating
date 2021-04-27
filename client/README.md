@@ -7,9 +7,18 @@ This app fetches a task, displays it so the user can rate it and sends back the 
 It is compatible with Windows, Linux, MacOS, and smartphones as well (Android, iOS).
 
 ## Requirements
-Kivy 2.0.0 
+Python 3.7
 
-To install Kivy visit the installation [page](https://kivy.org/doc/stable/gettingstarted/installation.html#installation-canonical) or use the following command.
+### Server
+
+uvicorn 0.13.4
+
+```bash
+pip install uvicorn
+```
+
+### Client
+Kivy 2.0.0 
 
 ```bash
 pip install kivy
@@ -17,15 +26,24 @@ pip install kivy
 
 ## Usage
 
-To run the app, simply run the following command on your terminal.
+To run the server, run the following command from the server folder on your terminal.
 
 ```
-python controller.py
+unicorn server_api:app --reload
 ```
 
-2 simple tests are also included in test folder. 
-To run the test, run the following command on your teminal in the current directory.
+To run the client, run the following command from the client folder on your termnal:
 
 ```
-pytest test/test.py
+python controller.py 
+```
+
+
+2 simple tests are also included in test folder.
+
+To run the test, run the following command from the client folder on your teminal:
+
+```
+pytest test/test_cases.py
+
 ```
